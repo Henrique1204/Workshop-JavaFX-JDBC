@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
 
 
@@ -16,10 +16,16 @@ public class Main extends Application
 	{
 		try
 		{
+			//Define o arquivo que será a tela
 			FXMLLoader loader = new FXMLLoader( getClass().getResource("/gui/MainView.fxml") );
-			Parent parent = loader.load();
+			ScrollPane scrollPane = loader.load();
 
-			Scene cena = new Scene(parent);
+			//Ajusta o tamanho do ScrollPane na janela do programa
+			scrollPane.setFitToWidth(true);
+			scrollPane.setFitToHeight(true);
+
+			//Configura a tela
+			Scene cena = new Scene(scrollPane);
 			primaryStage.setScene(cena);
 			primaryStage.setTitle("Sample JavaFX application");
 			primaryStage.show();
