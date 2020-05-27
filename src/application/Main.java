@@ -11,6 +11,13 @@ import javafx.stage.Stage;
 
 public class Main extends Application
 {
+	private static Scene cena;
+
+	public static Scene getCena()
+	{
+		return cena;
+	}
+
 	@Override
 	public void start(Stage primaryStage)
 	{
@@ -25,7 +32,7 @@ public class Main extends Application
 			scrollPane.setFitToHeight(true);
 
 			//Configura a tela
-			Scene cena = new Scene(scrollPane);
+			cena = new Scene(scrollPane);
 			primaryStage.setScene(cena);
 			primaryStage.setTitle("Sample JavaFX application");
 			primaryStage.show();
