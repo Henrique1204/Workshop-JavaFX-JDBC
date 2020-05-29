@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import application.Main;
+import gui.listener.DataChangeListener;
 import gui.util.Alerta;
 import gui.util.Utils;
 import javafx.collections.FXCollections;
@@ -26,7 +27,7 @@ import javafx.stage.Stage;
 import model.entidades.Department;
 import model.servicos.DepartmentServico;
 
-public class DepartmentListController implements Initializable
+public class DepartmentListController implements Initializable, DataChangeListener
 {
 	private DepartmentServico servico;
 	@FXML
@@ -43,7 +44,7 @@ public class DepartmentListController implements Initializable
 	public void setDepartmentServico(DepartmentServico servico)
 	{
 		this.servico = servico;
-	}
+	} 
 
 	//Métodos implementados
 	@FXML
@@ -85,6 +86,7 @@ public class DepartmentListController implements Initializable
 			DepartmentFormController controller = carregar.getController();
 			controller.setDepartment(obj);
 			controller.setServico(new DepartmentServico());
+			controller.subscribeDataChangeListener(this);
 			controller.atualizarDadosForm();
 
 			Stage ligacaoStage = new Stage();
@@ -107,5 +109,11 @@ public class DepartmentListController implements Initializable
 	public void initialize(URL url, ResourceBundle rb)
 	{
 		iniciarNode();
+	}
+
+	@Override
+	public void onDataChange()
+	{
+		atualizarTableView();
 	}
 }
