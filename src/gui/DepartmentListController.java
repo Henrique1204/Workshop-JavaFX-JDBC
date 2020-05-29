@@ -50,8 +50,8 @@ public class DepartmentListController implements Initializable
 	public void onBtnNovoAction(ActionEvent evento)
 	{
 		Stage parentStage = Utils.stageAtual(evento);
-
-		ligarAoForm("/gui/DepartmentForm.fxml", parentStage);
+		Department obj = new Department();
+		ligarAoForm(obj,"/gui/DepartmentForm.fxml", parentStage);
 	}
 
 	private void iniciarNode()
@@ -75,12 +75,16 @@ public class DepartmentListController implements Initializable
 		tableViewDepartment.setItems(obsLista);
 	}
 
-	private void ligarAoForm(String caminhoAbsoluto, Stage parentStage)
+	private void ligarAoForm(Department obj, String caminhoAbsoluto, Stage parentStage)
 	{
 		try
 		{
 			FXMLLoader carregar = new FXMLLoader(getClass().getResource(caminhoAbsoluto));
 			Pane pane = carregar.load();
+
+			DepartmentFormController controller = carregar.getController();
+			controller.setDepartment(obj);
+			controller.atualizarDadosForm();
 
 			Stage ligacaoStage = new Stage();
 			ligacaoStage.setTitle("Entre com os dados do Department");
