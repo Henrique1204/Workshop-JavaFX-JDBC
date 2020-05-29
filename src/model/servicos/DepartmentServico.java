@@ -10,6 +10,19 @@ public class DepartmentServico
 {
 	private EntidadeDao<Department> dao = DaoFactory.criarDepartmentDao();
 
+	//Métodos implementados
+	public void salvarOuAtualizar(Department obj)
+	{
+		if (obj.getId() == null)
+		{
+			dao.inserir(obj);
+		}
+		else
+		{
+			dao.atualizar(obj);
+		}
+	}
+
 	//Métodos sobrescrevidos
 	public List<Department> buscarTodos()
 	{

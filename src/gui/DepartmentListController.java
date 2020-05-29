@@ -84,6 +84,7 @@ public class DepartmentListController implements Initializable
 
 			DepartmentFormController controller = carregar.getController();
 			controller.setDepartment(obj);
+			controller.setServico(new DepartmentServico());
 			controller.atualizarDadosForm();
 
 			Stage ligacaoStage = new Stage();

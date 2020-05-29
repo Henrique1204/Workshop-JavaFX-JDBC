@@ -10,4 +10,16 @@ public class Utils
 	{
 		return (Stage) ( (Node) evento.getSource() ).getScene().getWindow();
 	}
+
+	public static Integer converterInt(String str)
+	{
+		try
+		{
+			return Integer.parseInt(str);
+		}
+		catch (NumberFormatException e)
+		{
+			return null;
+		}
+	}
 }
