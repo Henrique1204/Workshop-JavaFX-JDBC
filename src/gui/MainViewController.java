@@ -3,6 +3,7 @@ package gui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 import application.Main;
 import gui.util.Alerta;
@@ -37,40 +38,21 @@ public class MainViewController implements Initializable
 	@FXML
 	public void onMenuItemDepartmentAction()
 	{
-		carregarView2("/gui/DepartmentList.fxml");
+		carregarView("/gui/DepartmentList.fxml", (DepartmentListController controller) ->
+		{
+			controller.setDepartmentServico(new DepartmentServico());
+			controller.atualizarTableView();
+		});
 	}
 
 	@FXML
 	public void onMenuItemAboutAction()
 	{
-		carregarView("/gui/About.fxml");
+		carregarView("/gui/About.fxml", x -> {});
 	}
 
 	//synchronized garante que o método não seja interrompido
-	private synchronized void carregarView(String caminhoAbsoluto)
-	{
-		try
-		{
-			FXMLLoader loader = new FXMLLoader( getClass().getResource(caminhoAbsoluto) );
-			VBox novoVBox = loader.load();
-
-			Scene cena = Main.getCena();
-
-			VBox mainVBox = (VBox) ((ScrollPane) cena.getRoot()).getContent();
-			Node mainMenu = mainVBox.getChildren().get(0);
-
-			mainVBox.getChildren().clear();
-			mainVBox.getChildren().add(mainMenu);
-			mainVBox.getChildren().addAll(novoVBox.getChildren());
-		}
-		catch (IOException e)
-		{
-			Alerta.mostrarAlerta("IOException", "Erro carregando a página", e.getMessage(), AlertType.ERROR);
-		}
-	}
-
-	//synchronized garante que o método não seja interrompido
-	private synchronized void carregarView2(String caminhoAbsoluto)
+	private synchronized <T> void carregarView(String caminhoAbsoluto, Consumer<T> acionarInicialização)
 	{
 		try
 		{
@@ -86,9 +68,8 @@ public class MainViewController implements Initializable
 			mainVBox.getChildren().add(mainMenu);
 			mainVBox.getChildren().addAll(novoVBox.getChildren());
 
-			DepartmentListController controller = loader.getController();
-			controller.setDepartmentServico(new DepartmentServico());
-			controller.atualizarTableView();
+			T controller = loader.getController();
+			acionarInicialização.accept(controller);
 		}
 		catch (IOException e)
 		{
