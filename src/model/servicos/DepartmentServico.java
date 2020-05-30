@@ -23,6 +23,11 @@ public class DepartmentServico
 		}
 	}
 
+	public void remover(Department obj)
+	{
+		dao.deletarPorId(obj.getId());
+	}
+
 	//Métodos sobrescrevidos
 	public List<Department> buscarTodos()
 	{
