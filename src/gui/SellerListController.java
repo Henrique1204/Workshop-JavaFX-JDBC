@@ -31,6 +31,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entidades.Seller;
+import model.servicos.DepartmentServico;
 import model.servicos.SellerServico;
 
 public class SellerListController implements Initializable, DataChangeListener
@@ -110,7 +111,8 @@ public class SellerListController implements Initializable, DataChangeListener
 
 			SellerFormController controller = carregar.getController();
 			controller.setSeller(obj);
-			controller.setServico(new SellerServico());
+			controller.setServicos(new SellerServico(), new DepartmentServico());
+			controller.carregarObjetosAssociados();
 			controller.subscribeDataChangeListener(this);
 			controller.atualizarDadosForm();
 
@@ -124,6 +126,7 @@ public class SellerListController implements Initializable, DataChangeListener
 		}
 		catch (IOException e)
 		{
+			e.printStackTrace();
 			Alerta.mostrarAlerta("IO Exception", "Erro ao carregar a View", e.getMessage(), AlertType.ERROR);
 		}
 	}
