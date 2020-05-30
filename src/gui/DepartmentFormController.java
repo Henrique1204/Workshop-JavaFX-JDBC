@@ -3,7 +3,9 @@ package gui;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import db.DBException;
 import gui.listener.DataChangeListener;
@@ -18,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import model.entidades.Department;
+import model.exception.ValidacaoException;
 import model.servicos.DepartmentServico;
 
 public class DepartmentFormController implements Initializable
@@ -66,6 +69,10 @@ public class DepartmentFormController implements Initializable
 			notifyDataChangeListeners();
 			Utils.stageAtual(evento).close();
 		}
+		catch( ValidacaoException e)
+		{
+			setMsgErro(e.getErros());
+		}
 		catch (DBException e)
 		{
 			Alerta.mostrarAlerta("Erro ao salvar o objeto", null, e.getMessage(), AlertType.ERROR);
@@ -97,6 +104,18 @@ public class DepartmentFormController implements Initializable
 
 	private Department getDadosForm()
 	{
+		ValidacaoException exception = new ValidacaoException("Validacao erro");
+
+		if (txtName.getText() == null || txtName.getText().trim().equals(""))
+		{
+			exception.addError("nome", "Campo ta vazio");
+		}
+
+		if (exception.getErros().size() > 0)
+		{
+			throw exception;
+		}
+
 		return new Department( Utils.converterInt( txtId.getText() ), txtName.getText() );
 	}
 
@@ -111,6 +130,16 @@ public class DepartmentFormController implements Initializable
 		for(DataChangeListener item : this.dataChangeListeners)
 		{
 			item.onDataChange();
+		}
+	}
+
+	private void setMsgErro(Map<String, String> erro)
+	{
+		Set<String> campos = erro.keySet();
+
+		if (campos.contains("nome"))
+		{
+			lblErrorName.setText(erro.get("nome"));
 		}
 	}
 
