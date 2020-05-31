@@ -1,9 +1,11 @@
 package gui;
 
 import java.net.URL;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -156,12 +158,32 @@ public class SellerFormController implements Initializable
 
 	private Seller getDadosForm()
 	{
-		/*
 		ValidacaoException exception = new ValidacaoException("Validacao erro");
+		Instant instante;
 
 		if (txtName.getText() == null || txtName.getText().trim().equals(""))
 		{
 			exception.addError("nome", "Campo ta vazio");
+		}
+
+		if (txtEmail.getText() == null || txtEmail.getText().trim().equals(""))
+		{
+			exception.addError("email", "Campo ta vazio");
+		}
+
+		if (dpBirthDate.getValue() == null)
+		{
+			exception.addError("birthDate", "Campo ta vazio");
+			instante = null;
+		}
+		else
+		{
+			instante = Instant.from(dpBirthDate.getValue().atStartOfDay(ZoneId.systemDefault()));	
+		}
+
+		if (txtBaseSalary.getText() == null || txtBaseSalary.getText().trim().equals(""))
+		{
+			exception.addError("baseSalary", "Campo ta vazio");
 		}
 
 		if (exception.getErros().size() > 0)
@@ -169,10 +191,14 @@ public class SellerFormController implements Initializable
 			throw exception;
 		}
 
-		return new Seller( Utils.converterInt( txtId.getText() ), txtName.getText() );
-		*/
-
-		return null;
+		return new Seller(
+					Utils.converterInt(txtId.getText()),
+					txtName.getText(),
+					txtEmail.getText(),
+					Date.from(instante),
+					Utils.converterDouble(txtBaseSalary.getText()),
+					comboBoxDepartment.getValue()
+				);
 	}
 
 	public void subscribeDataChangeListener(DataChangeListener listener)
@@ -205,10 +231,10 @@ public class SellerFormController implements Initializable
 	{
 		Set<String> campos = erro.keySet();
 
-		if (campos.contains("nome"))
-		{
-			lblErrorName.setText(erro.get("nome"));
-		}
+		lblErrorName.setText( (campos.contains("nome")) ? erro.get("nome") : "" );
+		lblErrorEmail.setText( (campos.contains("email")) ? erro.get("email") : "" );
+		lblErrorBirthDate.setText( (campos.contains("birthDate")) ? erro.get("birthDate") : "" );
+		lblErrorBaseSalary.setText( (campos.contains("baseSalary")) ? erro.get("baseSalary") : "" );
 	}
 
 	private void iniciarComboBoxDepartment()
